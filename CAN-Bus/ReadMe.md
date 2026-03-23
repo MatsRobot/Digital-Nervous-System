@@ -22,7 +22,7 @@
       <h2>🔌 Protocol Logic: Multi-Master & Differential Signaling</h2>
     </td>
     <td width="40%" align="center" valign="middle">
-      <img src="canbus-schematic.png" alt="CAN-Bus Wiring Diagram" width="300" style="border-radius: 8px;" />
+      <img src="CAN_Bus.png" alt="CAN-Bus Wiring Diagram" width="300" style="border-radius: 8px;" />
     </td>
   </tr>
   <tr>
