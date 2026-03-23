@@ -22,7 +22,7 @@
       <h2>🔌 Protocol Logic: Timing Without a Clock</h2>
     </td>
     <td width="40%" align="center" valign="middle">
-      <img src="uart-schematic.png" alt="UART Physical Wiring" width="350" style="border-radius: 8px;" />
+      <img src="UART.png" alt="UART Physical Wiring" width="350" style="border-radius: 8px;" />
     </td>
   </tr>
   <tr>
