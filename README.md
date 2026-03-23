@@ -23,11 +23,11 @@ From **N100** computer-vision processing to **ESP32** motor control, this repo t
 
 <table width="100%">
   <tr>
-    <td width="70%" align="left" valign="middle">
+    <td width="50%" align="left" valign="middle">
       <h2>🔌 The Mission: Seamless Connectivity</h2>
     </td>
-    <td width="30%" align="center" valign="middle">
-      <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=150" alt="Circuitry Visualization" width="150" style="border-radius: 8px;" />
+    <td width="50%" align="center" valign="middle">
+      <img src="https://github.com/user-attachments/assets/16fdaa31-6648-426e-9237-6d00fc5ef95e" alt="Circuitry Visualization" width="350" style="border-radius: 8px;" />
     </td>
   </tr>
   <tr>
