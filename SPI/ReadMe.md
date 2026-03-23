@@ -22,7 +22,7 @@
       <h2>🔌 Protocol Logic: The 4-Wire Performance</h2>
     </td>
     <td width="40%" align="center" valign="middle">
-      <img src="spi-schematic.png" alt="SPI Wiring Diagram" width="300" style="border-radius: 8px;" />
+      <img src="SPI.png" alt="SPI Wiring Diagram" width="300" style="border-radius: 8px;" />
     </td>
   </tr>
   <tr>
