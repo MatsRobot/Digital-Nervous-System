@@ -22,7 +22,7 @@
       <h2>📟 Protocol Logic: The Synchronous Dialogue</h2>
     </td>
     <td width="40%" align="center" valign="middle">
-      <img src="i2c-schematic.png" alt="I2C Multi-Device Bus" width="300" style="border-radius: 8px;" />
+      <img src="I2C.png" alt="I2C Multi-Device Bus" width="300" style="border-radius: 8px;" />
     </td>
   </tr>
   <tr>
