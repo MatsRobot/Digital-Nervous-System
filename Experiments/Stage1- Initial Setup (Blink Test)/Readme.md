@@ -40,7 +40,7 @@ A successful blink test is required before adding any other wires.
 For this stage, **only the LED and its current-limiting resistor** are populated. You can ignore the CAN transceiver and I2C devices for now.
 
 <p align="center">
-  <img src="../path/to/full_circuit_diagram.png" alt="MatsRobot Full Circuit Diagram" width="800">
+  <img src="https://github.com/user-attachments/assets/382cfbbc-6ee8-486c-8cdc-0f76a5d29197" alt="MatsRobot Full Circuit Diagram" width="800">
   <br>
   <em>Figure 1: Complete architecture. For Stage 1, only the components related to GP13 (Blue Wire, LED, and Power Rail) are tested and verified.</em>
 </p>
