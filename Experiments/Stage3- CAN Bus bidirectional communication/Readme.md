@@ -1,70 +1,78 @@
 # 🧪 Experimental Lab: Digital Nervous System
 
-## Stage 3: Bidirectional CAN-Bus Network
+## Stage 1: Initial Setup (Heartbeat LED Validation)
 
 <p align="left">
   <a href="../">
     <img src="https://img.shields.io/badge/←_Back_to_Main-24292e?style=for-the-badge&logo=github&logoColor=white" />
   </a>
-  <a href="#python-setup">
-    <img src="https://img.shields.io/badge/Python_Venv_Setup-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  <a href="#validation-strategy">
+    <img src="https://img.shields.io/badge/Validation_Strategy-FFA500?style=for-the-badge&logo=blueprint&logoColor=white" />
+  </a>
+  <a href="#circuit-diagram">
+    <img src="https://img.shields.io/badge/Stage_1_Circuit-0366d6?style=for-the-badge&logo=blueprint&logoColor=white" />
+  </a>
+  <a href="#workflow">
+    <img src="https://img.shields.io/badge/Workflow-238636?style=for-the-badge&logo=visual-studio-code&logoColor=white" />
   </a>
 </p>
 
-
-![CAN_Bus_ESP32_S3_bb](https://github.com/user-attachments/assets/d3b89b4c-3c7a-4370-93ed-97feb82b14f9)
-
-This stage implements the **Network Layer**. The ESP32-S3 is no longer an isolated device; it is now a broadcasting node on a 500kbps CAN-Bus network.
+This directory serves as the isolated initial validation phase for the MatsRobot complex multi-node architecture. It is designed to prove fundamental operation before introducing any sensors or communication protocols.
 
 ---
 
-## 🎯 Objectives
-1.  **Bit-Packing:** Convert 16-bit sensor data into 8-bit CAN frame segments.
-2.  **TWAI Integration:** Utilize the ESP32-S3 hardware CAN controller.
-3.  **Cross-Platform Telemetry:** Monitor physical distance values on a laptop via Python.
+## 🎯 Stage 1 Objective: Proving Silicon Life
+<a name="validation-strategy"></a>
+
+The overall MatsRobot system (seen in the full schematic) features multiple concurrent peripherals: CAN-Bus, I2C0, and I2C1. This complexity introduces significant noise and debugging risks.
+
+Stage 1 is the most critical phase: It bypasses all complex communication protocols. Its sole purpose is to establish a 'Known Good' point by answering two fundamental questions:
+1.  **Can we compile code for the ESP32-S3?** (Verified by PlatformIO build)
+2.  **Does the code physically execute on the Silicon?** (Verified by the 200ms blink of the Heartbeat LED on GPIO 13).
+
+A successful blink test is required before adding any other wires.
 
 ---
 
-## 💻 Python Monitor Setup (PC Side)
-<a name="python-setup"></a>
+## 🔌 Hardware Reference & Circuit Diagram
+<a name="circuit-diagram"></a>
 
-Follow these exact steps to initialize the monitoring environment on your laptop:
+For this stage, **only the LED and its current-limiting resistor** are populated. You can ignore the CAN transceiver and I2C devices for now.
 
-1.  **Prepare Workspace:** Place `main.py` in your local folder.
-2.  **Open Terminal:** In VS Code, go to `View > Terminal`.
-3.  **Create Virtual Environment:**
-    ```bash
-    python -m venv .venv
-    ```
-4.  **Activate Environment:**
-    ```bash
-    .venv\Scripts\activate
-    ```
-    *Note: Ensure `(.venv)` appears in green in your terminal prompt.*
-5.  **Install Requirements:**
-    ```bash
-    pip install python-can pyserial
-    ```
-6.  **Update Pip (Optional):**
-    ```bash
-    python -m pip install --upgrade pip
-    ```
-7.  **Run the Monitor:**
-    ```bash
-    python main.py
-    ```
----
+<p align="center">
+  <img src="../path/to/full_circuit_diagram.png" alt="MatsRobot Full Circuit Diagram" width="800">
+  <br>
+  <em>Figure 1: Complete architecture. For Stage 1, only the components related to GP13 (Blue Wire, LED, and Power Rail) are tested and verified.</em>
+</p>
 
-
-<img width="896" height="1195" alt="Experimental Setup" src="https://github.com/user-attachments/assets/3862a8e8-e4e3-42b7-9d53-ecd7a1f6b89b" />
+### Connection Detail (GPIO 13):
+This specific pin (often labeled '1' or 'GP13' on the DevKitC-1 header) is used to validate all stages. The firmware toggles the voltage on this pin.
+* **Blue Wire:** Originates from GP13 -> Goes through a current-limiting resistor -> Plugs into the Anode (Long Leg) of the 'Heartbeat LED'.
 
 ---
 
-## 🔌 Hardware Wiring (CAN)
-* **CAN Transceiver:** SN65HVD230 (connected to 3.3V).
-* **CTX (Transmit):** GPIO 17.
-* **CRX (Receive):** GPIO 18.
-* **Termination:** Ensure a 120Ω resistor is present between CAN-H and CAN-L to prevent signal reflection.
+## 🛠️ Stage-Specific Files
+To maintain a "simple and effective" repository, we keep each stage autonomous. This folder contains:
+* **`src/main.cpp`**: Source code focused entirely on the 200ms LED loop.
+* **`platformio.ini`**: Environment configurations and required USB-CDC flags to connect to the N16P8 S3.
+
+---
+
+## 💻 Developer Workflow
+<a name="workflow"></a>
+
+### 🚀 Firmware Deployment (VS Code + PlatformIO)
+
+1.  **Build:** Verify the code compiles without errors.
+    ```bash
+    pio run
+    ```
+2.  **Upload:** Flash the firmware to the ESP32-S3.
+    ```bash
+    pio run --target upload
+    ```
+
+**Observe:** If the S3 is functional, the LED attached to GPIO 13 will begin to blink at a 2.5Hz frequency (200ms ON, 200ms OFF). If it does not, all subsequent complex stages cannot be attempted.
 
 ---
 
