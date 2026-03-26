@@ -1,69 +1,64 @@
 # 🧪 Experimental Lab: Digital Nervous System
 
-## Stage 2:- Sensor Working on I2C 
+## Stage 2: Dual-Bus I2C Integration (Sensor & UI)
 
 <p align="left">
   <a href="../">
     <img src="https://img.shields.io/badge/←_Back_to_Main-24292e?style=for-the-badge&logo=github&logoColor=white" />
   </a>
-  <a href="#setup-guide">
-    <img src="https://img.shields.io/badge/Setup_Guide-0366d6?style=for-the-badge&logo=blueprint&logoColor=white" />
+  <a href="#dual-bus-architecture">
+    <img src="https://img.shields.io/badge/Dual_Bus_Logic-FFA500?style=for-the-badge&logo=cpu&logoColor=white" />
   </a>
-  <a href="#workflow">
-    <img src="https://img.shields.io/badge/Workflow-238636?style=for-the-badge&logo=visual-studio-code&logoColor=white" />
+  <a href="#hardware-setup">
+    <img src="https://img.shields.io/badge/Hardware_Setup-0366d6?style=for-the-badge&logo=blueprint&logoColor=white" />
   </a>
 </p>
 
-This directory serves as the **Living Lab** for the MatsRobot project. It documents the step-by-step evolution of the communication backbone, from basic heartbeats to complex multi-node CAN configurations.
+This stage evolves from the simple blink to a multi-peripheral system. We are now integrating a **VL53L0X Time-of-Flight (ToF) sensor** and an **SSD1306 OLED display**.
 
 ---
 
-## 📅 Experimental Roadmap & Status
-Each stage builds upon the last. Use these folders to find specific circuit diagrams, firmware, and test results.
+## 🎯 Stage 2 Objective: Multi-Peripheral Orchestration
+<a name="dual-bus-architecture"></a>
 
-| Stage | Focus | Status | Hardware Reference |
+The ESP32-S3 has two independent hardware I2C peripherals. In this stage, we implement a **Dual-Bus Strategy** to maximize stability:
+1.  **I2C Bus 0 (GP8/GP9):** Dedicated to the **VL53L0X Sensor**.
+2.  **I2C Bus 1 (GP38/GP39):** Dedicated to the **OLED Display**.
+
+**Why two buses?**
+Laser sensors can occasionally "hang" or timing-out. By placing the display on a separate bus, we ensure that a sensor error doesn't freeze the user interface, allowing for better real-time debugging.
+
+---
+
+## 🔌 Hardware Setup
+<a name="hardware-setup"></a>
+
+Refer to the master circuit diagram for wire colors. 
+
+| Component | Pin Function | ESP32-S3 Pin | Bus ID |
 | :--- | :--- | :--- | :--- |
-| **[Stage 1](./Stage1-Initial-Setup)** | Blink Test & Basic GPIO | ✅ Verified | ESP32 / Arduino Nano |
-| **[Stage 2](./Stage2-Sensor-working-on-I2C-bus)** | I2C Sensor Integration | ✅ Verified | MPU6050 / BME280 |
-| **[Stage 3](./Stage3-CAN-Bus-bidirectional-communication)** | Bidirectional CAN-Bus | ✅ Verified | MCP2515 Transceivers |
-| **[Stage 4](./Stage4-Adding-Practical-Nodes-to-CAN-Bus)** | Practical Node Deployment | 🛠️ In Progress | Custom Actuator Nodes |
+| **VL53L0X** | SDA | **GPIO 8** | Wire (I2C0) |
+| **VL53L0X** | SCL | **GPIO 9** | Wire (I2C0) |
+| **OLED** | SDA | **GPIO 38** | Wire1 (I2C1) |
+| **OLED** | SCL | **GPIO 39** | Wire1 (I2C1) |
+| **Heartbeat LED**| Signal | **GPIO 13** | Digital Out |
 
 ---
 
-## 🛠️ Setup & Strategy
-<a name="setup-guide"></a>
+## 💻 Validation Workflow
 
-To maintain a "simple and effective" repository, we keep each stage autonomous. Each folder contains only the essential files required to reproduce the experiment:
-* **`circuit-diagrams/`**: Visual wiring guides (PNG/PDF).
-* **`src/main.cpp`**: The specific firmware logic for that stage.
-* **`platformio.ini`**: Environment configurations and library dependencies.
-* **`main.py`**: Laptop-side scripts for bus monitoring or data logging.
+1.  **Install Libraries:** Ensure `Adafruit SSD1306` and `Pololu VL53L0X` are listed in your `platformio.ini`.
+2.  **Upload Firmware:** Flash the Stage 2 code.
+3.  **Verification:**
+    * **The LED:** Should blink faster than Stage 1 (100ms cycle).
+    * **The OLED:** Should display "ESP32-S3 CAN NODE" and a live distance reading.
+    * **The Laser:** Move your hand in front of the sensor to see the millimeters update in real-time.
+
+> [!IMPORTANT]
+> **I2C Pull-up Resistors:** Most VL53L0X and OLED modules include internal 10k pull-up resistors. If you experience "OLED fail" or "TIMEOUT" messages, check that your 3.3V power rail is stable.
+
 
 ---
 
-## 💻 Developer Workflow
-<a name="workflow"></a>
 
-### 🔌 Firmware (VS Code + PlatformIO)
-When adding or testing a node, use the PlatformIO Core CLI or the VS Code interface:
-
-1.  **Initialize/Build:** `pio run`
-2.  **Upload to Hardware:** `pio run --target upload`
-3.  **Live Debugging:** `pio device monitor`
-
-> [!TIP]
-> **Port Conflicts:** Ensure the Serial Monitor is closed before attempting a new upload, especially when working with high-speed CAN data.
-
-### 🐍 Python Host Setup (Laptop)
-To interact with the nodes from your computer, use a **Virtual Environment** to manage dependencies like `python-can` or `pyserial`.
-
-```bash
-# 1. Create and Activate Environment
-python -m venv venv
-source venv/bin/activate  # Windows: .\venv\Scripts\activate
-
-# 2. Install Stage-Specific Requirements
-pip install python-can pyserial
-
-# 3. Run the Experiment Script
-python main.py
+<small>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</small>
