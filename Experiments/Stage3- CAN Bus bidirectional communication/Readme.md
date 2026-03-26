@@ -11,6 +11,9 @@
   </a>
 </p>
 
+
+![CAN_Bus_ESP32_S3_bb](https://github.com/user-attachments/assets/d3b89b4c-3c7a-4370-93ed-97feb82b14f9)
+
 This stage implements the **Network Layer**. The ESP32-S3 is no longer an isolated device; it is now a broadcasting node on a 500kbps CAN-Bus network.
 
 ---
@@ -50,6 +53,10 @@ Follow these exact steps to initialize the monitoring environment on your laptop
     ```bash
     python main.py
     ```
+---
+
+
+<img width="896" height="1195" alt="Experimental Setup" src="https://github.com/user-attachments/assets/3862a8e8-e4e3-42b7-9d53-ecd7a1f6b89b" />
 
 ---
 
