@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://matsrobot.github.io/Favicon-192.png" sizes="192x192">
     
-    <title>Stage 1: Initial Setup | MatsRobot Knowledge Base</title>
-    <meta name="description" content="Initial validation phase for the MatsRobot complex multi-node architecture, focusing on Heartbeat LED validation.">
+    <title>Experimental Lab | MatsRobot Knowledge Base</title>
+    <meta name="description" content="Living Lab documentation for the MatsRobot project, tracking the evolution of robotic communication backbones.">
     
     <style>
         :root {
@@ -18,8 +18,6 @@
             --gh-bg-gray: #f6f8fa;
             --note-bg: #f1f8ff;
             --note-border: #0366d6;
-            --warning-bg: #fffbdd;
-            --warning-border: #d4a017;
         }
 
         body { 
@@ -70,22 +68,6 @@
 
         .hero-text { flex: 3; }
 
-        .image-sidebar { 
-            flex: 2; 
-            border: 1px solid var(--gh-border);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            background: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .image-sidebar img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }
-
         h1 { font-size: 1.8rem; margin-top: 0; }
         h2 { color: var(--gh-blue); border-bottom: 1px solid var(--gh-border); padding-bottom: 0.3em; margin-top: 2rem; }
         
@@ -97,49 +79,41 @@
             border-radius: 4px;
         }
 
-        .warning-box {
-            background-color: var(--warning-bg);
-            padding: 1.25rem;
-            border: 1px solid var(--warning-border);
-            border-radius: 6px;
+        /* Roadmap Table */
+        .roadmap-table {
+            width: 100%;
+            border-collapse: collapse;
             margin: 1.5rem 0;
         }
 
-        .code-block {
+        .roadmap-table th, .roadmap-table td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid var(--gh-border);
+        }
+
+        .roadmap-table th { background: var(--gh-bg-gray); }
+
+        /* Code and Terminal Blocks */
+        code {
+            background-color: rgba(27,31,35,0.05);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, monospace;
+            font-size: 85%;
+        }
+
+        .terminal-block {
             background-color: var(--gh-bg-gray);
             padding: 1rem;
             border-radius: 6px;
             border: 1px solid var(--gh-border);
-            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, monospace;
-            font-size: 0.9rem;
-            margin: 1rem 0;
             overflow-x: auto;
+            margin: 1rem 0;
         }
 
-        .step-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .step-list li {
-            padding: 10px;
-            border-bottom: 1px solid var(--gh-border);
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .btn-github { 
-            background-color: var(--gh-green); 
-            color: white !important; 
-            padding: 10px 20px; 
-            text-decoration: none; 
-            border-radius: 6px; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 10px; 
-            font-weight: 600;
-        }
+        .status-verified { color: var(--gh-green); font-weight: bold; }
+        .status-progress { color: #9a6700; font-weight: bold; }
 
         footer { 
             margin-top: 4rem; 
@@ -159,76 +133,91 @@
 <body>
 
     <nav class="sub-nav">
-        <a href="../" class="nav-back">← Lab Home</a>
-        <a href="#validation-strategy">🎯 Strategy</a>
-        <a href="#circuit-diagram">🔌 Circuit</a>
-        <a href="#workflow">🚀 Workflow</a>
+        <a href="../" class="nav-back">← Back to Main</a>
+        <a href="#roadmap">📅 Roadmap</a>
+        <a href="#setup">🛠️ Setup</a>
+        <a href="#workflow">💻 Workflow</a>
     </nav>
 
     <div class="hero-section">
         <div class="hero-text">
-            <h1>🧪 Stage 1: Initial Setup</h1>
-            <p>The <b>Heartbeat LED Validation</b> phase. This isolated test is designed to prove fundamental operation before introducing complex sensors or CAN-Bus protocols.</p>
+            <h1>🧪 Experimental Lab: Digital Nervous System</h1>
+            <p>This directory serves as the <b>Living Lab</b> for the MatsRobot project. It documents the step-by-step evolution of the communication backbone, from basic heartbeats to complex multi-node CAN configurations.</p>
             
             <div class="note">
-                <strong>Goal:</strong> Establish a 'Known Good' point by verifying silicon life through a simple 200ms pulse.
+                <strong>Strategy:</strong> We maintain a modular environment where each stage is autonomous, reproducible, and documented with its own firmware and circuit logic.
             </div>
-
-            <a href="https://github.com/MatsRobot/Digital-Nervous-System/tree/main/Experimental-Lab/Stage1-Initial-Setup" class="btn-github">
-                <span>View Stage Files on GitHub</span>
-            </a>
-        </div>
-
-        <div class="image-sidebar">
-            <div style="font-size: 2rem; margin-bottom: 10px;">💓</div>
-            <p><strong>Status:</strong> Active Validation</p>
-            <p><small>Verifying ESP32-S3 Compile & Execute cycles.</small></p>
         </div>
     </div>
 
-    <h2 id="validation-strategy">🎯 Validation Strategy</h2>
-    <p>The MatsRobot system features multiple concurrent peripherals (CAN-Bus, dual I2C) which introduce significant noise and debugging risks. Stage 1 bypasses this complexity to answer two questions:</p>
+    <h2 id="roadmap">📅 Experimental Roadmap & Status</h2>
+    <p>Each stage builds upon the last. Use these links to find specific circuit diagrams, firmware, and test results.</p>
     
-    <ul class="step-list">
-        <li>
-            <span>✅</span> 
-            <div><strong>Compilation:</strong> Can we successfully build for the ESP32-S3 via PlatformIO?</div>
-        </li>
-        <li>
-            <span>✅</span> 
-            <div><strong>Execution:</strong> Does the code physically toggle GPIO 13 on the silicon?</div>
-        </li>
-    </ul>
+    <table class="roadmap-table">
+        <thead>
+            <tr>
+                <th>Stage</th>
+                <th>Focus</th>
+                <th>Status</th>
+                <th>Hardware Reference</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="./Stage1- Initial Setup (Blink Test)">Stage 1</a></td>
+                <td>Blink Test & Basic GPIO</td>
+                <td class="status-verified">✅ Verified</td>
+                <td>ESP32 / Arduino Nano</td>
+            </tr>
+            <tr>
+                <td><a href="./Stage2- Sensor working on I2C bus">Stage 2</a></td>
+                <td>I2C Sensor Integration</td>
+                <td class="status-verified">✅ Verified</td>
+                <td>MPU6050 / BME280</td>
+            </tr>
+            <tr>
+                <td><a href="./Stage3- CAN Bus bidirectional communication">Stage 3</a></td>
+                <td>Bidirectional CAN-Bus</td>
+                <td class="status-verified">✅ Verified</td>
+                <td>MCP2515 Transceivers</td>
+            </tr>
+            <tr>
+                <td><a href="./Stage4- Adding Practical Nodes to CAN Bus">Stage 4</a></td>
+                <td>Practical Node Deployment</td>
+                <td class="status-progress">🛠️ In Progress</td>
+                <td>Custom Actuator Nodes</td>
+            </tr>
+        </tbody>
+    </table>
 
-    <div class="warning-box">
-        <strong>⚠️ Prerequisite:</strong> A successful blink test is required before adding any other wires or nodes to the system.
-    </div>
-
-    <h2 id="circuit-diagram">🔌 Hardware Reference</h2>
-    <p>For this stage, <b>only the LED and its current-limiting resistor</b> are populated. You can ignore the CAN transceiver and I2C devices seen in the full schematic for now.</p>
-
-    <div class="image-sidebar" style="max-width: 800px; margin: 1.5rem auto;">
-        <img src="../path/to/full_circuit_diagram.png" alt="MatsRobot Full Circuit Diagram">
-        <p><small>Figure 1: Complete architecture. For Stage 1, only components related to GP13 (Blue Wire, LED) are verified.</small></p>
-    </div>
-
-    <h3>Connection Detail (GPIO 13):</h3>
+    <h2 id="setup">🛠️ Setup & Strategy</h2>
+    <p>To maintain a "simple and effective" repository, each stage is kept autonomous. Each folder contains only the essential files required to reproduce the experiment:</p>
     <ul>
-        <li><strong>Pin Location:</strong> Labeled '1' or 'GP13' on the DevKitC-1 header.</li>
-        <li><strong>Wiring:</strong> Originates from GP13 → Current-limiting resistor → Anode (Long Leg) of the Heartbeat LED.</li>
+        <li><strong><code>circuit-diagrams/</code>:</strong> Visual wiring guides (PNG/PDF).</li>
+        <li><strong><code>src/main.cpp</code>:</strong> The specific firmware logic for that stage.</li>
+        <li><strong><code>platformio.ini</code>:</strong> Environment configurations and library dependencies.</li>
+        <li><strong><code>main.py</code>:</strong> Laptop-side scripts for bus monitoring or data logging.</li>
     </ul>
 
-    <h2 id="workflow">🚀 Developer Workflow</h2>
-    <p>Deployment is handled via VS Code and the PlatformIO Core CLI.</p>
-
-    <div class="code-block">
-        # 1. Build: Verify code compiles without errors<br>
-        pio run<br><br>
-        # 2. Upload: Flash the firmware to the ESP32-S3<br>
-        pio run --target upload
+    <h2 id="workflow">💻 Developer Workflow</h2>
+    <h3>🔌 Firmware (VS Code + PlatformIO)</h3>
+    <p>When testing a node, use the PlatformIO interface or terminal:</p>
+    <div class="terminal-block">
+        <code>1. Initialize/Build: <b>pio run</b></code><br>
+        <code>2. Upload: <b>pio run --target upload</b></code><br>
+        <code>3. Live Debugging: <b>pio device monitor</b></code>
     </div>
 
-    <p><strong>Observation:</strong> Upon success, the LED on GPIO 13 will blink at a 2.5Hz frequency (200ms ON / 200ms OFF). If this fails, subsequent complex stages cannot be attempted.</p>
+    <h3>🐍 Python Host Setup (Laptop)</h3>
+    <p>To interact with nodes, use a <b>Virtual Environment</b> to manage dependencies:</p>
+    <div class="terminal-block">
+        <code># Create and Activate Environment</code><br>
+        <code>python -m venv venv</code><br>
+        <code>source venv/bin/activate</code><br><br>
+        <code># Install Requirements and Run</code><br>
+        <code>pip install python-can pyserial</code><br>
+        <code>python main.py</code>
+    </div>
 
     <footer>
         <p>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</p>
