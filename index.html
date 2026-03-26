@@ -137,7 +137,7 @@
 
         .btn-github { 
             background-color: var(--gh-green); 
-            color: white; 
+            color: white !important; 
             padding: 10px 20px; 
             text-decoration: none; 
             border-radius: 6px; 
@@ -183,6 +183,7 @@
         <a href="#i2c">🖇️ I2C</a>
         <a href="#spi">⚡ SPI</a>
         <a href="#can">🕸️ CAN Bus</a>
+        <a href="#experiments">🧪 Experiments</a>
     </nav>
 
     <div class="hero-section">
@@ -299,9 +300,30 @@
                 <a href="CAN-Bus/" class="btn-outline">Node Architecture →</a>
             </div>
         </div>
+
+        <div class="topic-card" id="lab-link">
+            <h3>🧪 Experiments</h3>
+            <p><b>Living Lab:</b> Real-world staging of the digital nervous system, tracking progress from initial heartbeat to full CAN Bus deployment.</p>
+            <div style="margin-top: 15px;">
+                <a href="Experiments/" class="btn-outline">High-Speed Setup →</a>
+            </div>
+        </div>
     </div>
 
-    <h2>Hardware Implementation</h2>
+    <h2 id="experiments">Experimental Implementation</h2>
+    <p>The <b>Experimental Lab</b> is where theory meets hardware. Each stage of the nervous system is validated through isolated test environments to ensure stability before full system integration.</p>
+
+    <div class="note">
+        <strong>Hardware & Software Strategy:</strong> All experiments utilize the ESP32-S3 (N16P8) and follow a modular validation process—starting with simple GPIO "heartbeats" and scaling to multi-node differential signaling.
+    </div>
+
+    <ul>
+        <li><strong>Full System Diagrams:</strong> Detailed schematics showing the interplay between the N100 orchestration layer and MCU endpoints.</li>
+        <li><strong>Stage-Based Validation:</strong> Step-by-step firmware deployments focusing on specific protocol reliability (UART, I2C, CAN).</li>
+        <li><strong>Silicon Life Tests:</strong> Proving fundamental hardware execution before introducing bus noise or peripherals.</li>
+    </ul>
+
+    <h2>Hardware Ecosystem</h2>
     <ul>
         <li><strong>N100 Desktop:</strong> Orchestrates high-level AI and sends hex-commands via UART.</li>
         <li><strong>ESP32-S3/C3:</strong> Handles Bluetooth commands and bridges Vision/BT data.</li>
