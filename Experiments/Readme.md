@@ -65,3 +65,10 @@ pip install python-can pyserial
 
 # 3. Run the Experiment Script
 python main.py
+
+```
+
+---
+
+
+<small>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</small>
