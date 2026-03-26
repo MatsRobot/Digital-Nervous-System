@@ -79,6 +79,20 @@
             border-radius: 4px;
         }
 
+        /* GitHub Button Style */
+        .btn-github { 
+            background-color: var(--gh-green); 
+            color: white !important; 
+            padding: 10px 20px; 
+            text-decoration: none; 
+            border-radius: 6px; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-weight: 600;
+        }
+        .btn-github:hover { background-color: var(--gh-green-hover); }
+
         /* Roadmap Table */
         .roadmap-table {
             width: 100%;
@@ -147,6 +161,10 @@
             <div class="note">
                 <strong>Strategy:</strong> We maintain a modular environment where each stage is autonomous, reproducible, and documented with its own firmware and circuit logic.
             </div>
+
+            <div style="margin-top: 15px;">
+                <a class="btn-github" href="https://github.com/MatsRobot/Digital-Nervous-System">View GitHub Repository</a>
+            </div>
         </div>
     </div>
 
@@ -164,25 +182,25 @@
         </thead>
         <tbody>
             <tr>
-                <td><a href="./Stage1- Initial Setup (Blink Test)">Stage 1</a></td>
+                <td><a href="./Stage1-%20Initial%20Setup%20(Blink%20Test)/index.html">Stage 1</a></td>
                 <td>Blink Test & Basic GPIO</td>
                 <td class="status-verified">✅ Verified</td>
                 <td>ESP32 / Arduino Nano</td>
             </tr>
             <tr>
-                <td><a href="./Stage2- Sensor working on I2C bus">Stage 2</a></td>
+                <td><a href="./Stage2-%20Sensor%20working%20on%20I2C%20bus">Stage 2</a></td>
                 <td>I2C Sensor Integration</td>
                 <td class="status-verified">✅ Verified</td>
                 <td>MPU6050 / BME280</td>
             </tr>
             <tr>
-                <td><a href="./Stage3- CAN Bus bidirectional communication">Stage 3</a></td>
+                <td><a href="./Stage3-%20CAN%20Bus%20bidirectional%20communication">Stage 3</a></td>
                 <td>Bidirectional CAN-Bus</td>
                 <td class="status-verified">✅ Verified</td>
                 <td>MCP2515 Transceivers</td>
             </tr>
             <tr>
-                <td><a href="./Stage4- Adding Practical Nodes to CAN Bus">Stage 4</a></td>
+                <td><a href="./Stage4-%20Adding%20Practical%20Nodes%20to%20CAN%20Bus">Stage 4</a></td>
                 <td>Practical Node Deployment</td>
                 <td class="status-progress">🛠️ In Progress</td>
                 <td>Custom Actuator Nodes</td>
