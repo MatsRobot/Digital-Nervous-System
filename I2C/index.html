@@ -56,25 +56,6 @@
             font-weight: 600;
         }
 
-        /* Layout */
-        .hero-section {
-            display: flex;
-            gap: 2.5rem;
-            margin-bottom: 2rem;
-            align-items: center;
-        }
-
-        .hero-text { flex: 3; }
-
-        .image-sidebar { 
-            flex: 2; 
-            border: 1px solid var(--gh-border);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            background: #fff;
-        }
-
         h1 { font-size: 1.8rem; margin-top: 0; }
         h2 { color: var(--gh-blue); border-bottom: 1px solid var(--gh-border); padding-bottom: 0.3em; margin-top: 2.5rem; }
         
@@ -86,10 +67,35 @@
             border-radius: 4px;
         }
 
+        /* Centered Diagram Box */
+        .diagram-container {
+            border: 1px solid var(--gh-border);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 2rem 0;
+            background: #fff;
+            text-align: center;
+        }
+
+        .i2c-diagram { 
+            width: 100%; 
+            max-width: 650px; 
+            height: auto; 
+            display: block; 
+            margin: 0 auto;
+        }
+
+        /* SVG Schematic Elements */
+        .bus-line { stroke: #6a737d; stroke-width: 2; fill: none; }
+        .device-box { fill: #fff; stroke: var(--gh-dark); stroke-width: 2; rx: 4; }
+        .master-node { fill: var(--note-bg); }
+        .pulse { stroke: var(--gh-blue); stroke-width: 3; stroke-dasharray: 5, 5; animation: dash 2s linear infinite; }
+        @keyframes dash { to { stroke-dashoffset: -20; } }
+
         /* Analysis Grid */
         .analysis-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin: 1.5rem 0;
         }
@@ -130,16 +136,8 @@
         .bit-ack { border-bottom: 4px solid var(--gh-green); }
         .bit-stop { border-bottom: 4px solid #d73a49; font-weight: bold; }
 
-        /* SVG Schematic Styles */
-        .i2c-diagram { width: 100%; height: auto; }
-        .bus-line { stroke: #6a737d; stroke-width: 2; fill: none; }
-        .device-box { fill: #fff; stroke: var(--gh-dark); stroke-width: 2; rx: 4; }
-        .master-node { fill: var(--note-bg); }
-        .pulse { stroke: var(--gh-blue); stroke-width: 3; stroke-dasharray: 5, 5; animation: dash 2s linear infinite; }
-        @keyframes dash { to { stroke-dashoffset: -20; } }
-
         /* Buttons */
-        .btn-group { display: flex; gap: 10px; margin-top: 1rem; }
+        .btn-group { display: flex; gap: 10px; margin-top: 1rem; flex-wrap: wrap; }
         .btn { padding: 8px 16px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem; color: white; }
         .btn-blue { background: var(--gh-blue); }
         .btn-green { background: var(--gh-green); }
@@ -152,6 +150,12 @@
             color: #6a737d; 
             font-size: 0.85rem;
         }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            h1 { font-size: 1.5rem; }
+            .diagram-container { padding: 10px; }
+        }
     </style>
 </head>
 <body>
@@ -161,71 +165,72 @@
         <a href="#logic">📖 Bus Logic</a>
         <a href="#sequence">📦 Packet Sequence</a>
         <a href="#experimental">🧪 Pull-ups & Scanning</a>
+        <a href="#code">💻 Code</a>
     </nav>
 
-    <div class="hero-section">
-        <div class="hero-text">
-            <h1>🖇️ I2C: Inter-Integrated Circuit</h1>
-            <p>I2C is the "Local Area Network" for the robot's sensory organs. Unlike the point-to-point nature of UART, I2C is a <b>Shared Bus</b> architecture that allows the <b>ESP32 Controller</b> to communicate with multiple peripherals using just two wires.</p>
-            
-            <div class="note">
-                <strong>Core Role:</strong> Orchestrating the sensor suite, including IMUs (MPU6050), OLED displays, and Servo drivers (PCA9685).
-            </div>
-
-            <div class="btn-group">
-                <a href="#experimental" class="btn btn-blue">Experimental Design</a>
-                <a href="#code" class="btn btn-green">View Source Code</a>
-            </div>
+    <header>
+        <h1>🖇️ I2C: Inter-Integrated Circuit</h1>
+        <p>I2C is the "Local Area Network" for the robot's sensory organs. Unlike point-to-point UART, I2C is a <b>Shared Bus</b> architecture that allows the <b>ESP32 Controller</b> to communicate with multiple peripherals using just two wires.</p>
+        
+        <div class="note">
+            <strong>Core Role:</strong> Orchestrating the sensor suite, including IMUs (MPU6050), OLED displays, and Servo drivers.
         </div>
 
-        <div class="image-sidebar">
-            <svg viewBox="0 0 400 200" class="i2c-diagram">
-                <line x1="20" y1="60" x2="380" y2="60" class="bus-line"/> <line x1="20" y1="100" x2="380" y2="100" class="bus-line"/> <text x="20" y="50" style="font-size:10px; fill:#6a737d;">SCL (CLOCK)</text>
-                <text x="20" y="90" style="font-size:10px; fill:#6a737d;">SDA (DATA)</text>
-
-                <rect x="40" y="120" width="80" height="50" class="device-box master-node"/>
-                <text x="80" y="150" text-anchor="middle" style="font-size:12px; font-weight:bold;">ESP32</text>
-                <line x1="60" y1="60" x2="60" y2="120" class="bus-line pulse"/>
-                <line x1="100" y1="100" x2="100" y2="120" class="bus-line pulse"/>
-
-                <rect x="160" y="120" width="80" height="50" class="device-box"/>
-                <text x="200" y="150" text-anchor="middle" style="font-size:10px;">MPU6050</text>
-                <line x1="180" y1="60" x2="180" y2="120" class="bus-line"/>
-                <line x1="220" y1="100" x2="220" y2="120" class="bus-line"/>
-
-                <rect x="280" y="120" width="80" height="50" class="device-box"/>
-                <text x="320" y="150" text-anchor="middle" style="font-size:10px;">OLED SSD1306</text>
-                <line x1="300" y1="60" x2="300" y2="120" class="bus-line"/>
-                <line x1="340" y1="100" x2="340" y2="120" class="bus-line"/>
-            </svg>
-            <p><small>Multi-Drop Shared Bus Architecture</small></p>
+        <div class="btn-group">
+            <a href="#experimental" class="btn btn-blue">Experimental Design</a>
+            <a href="#code" class="btn btn-green">View Source Code</a>
         </div>
+    </header>
+
+    <div class="diagram-container">
+        <svg viewBox="0 0 400 200" class="i2c-diagram">
+            <line x1="20" y1="60" x2="380" y2="60" class="bus-line"/> 
+            <line x1="20" y1="100" x2="380" y2="100" class="bus-line"/> 
+            <text x="20" y="50" style="font-size:10px; fill:#6a737d;">SCL (CLOCK)</text>
+            <text x="20" y="90" style="font-size:10px; fill:#6a737d;">SDA (DATA)</text>
+
+            <rect x="40" y="120" width="80" height="50" class="device-box master-node"/>
+            <text x="80" y="150" text-anchor="middle" style="font-size:12px; font-weight:bold;">ESP32</text>
+            <line x1="60" y1="60" x2="60" y2="120" class="bus-line pulse"/>
+            <line x1="100" y1="100" x2="100" y2="120" class="bus-line pulse"/>
+
+            <rect x="160" y="120" width="80" height="50" class="device-box"/>
+            <text x="200" y="150" text-anchor="middle" style="font-size:10px;">MPU6050</text>
+            <line x1="180" y1="60" x2="180" y2="120" class="bus-line"/>
+            <line x1="220" y1="100" x2="220" y2="120" class="bus-line"/>
+
+            <rect x="280" y="120" width="80" height="50" class="device-box"/>
+            <text x="320" y="150" text-anchor="middle" style="font-size:10px;">OLED SSD1306</text>
+            <line x1="300" y1="60" x2="300" y2="120" class="bus-line"/>
+            <line x1="340" y1="100" x2="340" y2="120" class="bus-line"/>
+        </svg>
+        <p><small>Multi-Drop Shared Bus Architecture</small></p>
     </div>
 
     <h2 id="logic">📟 Protocol Logic: Synchronous Dialogue</h2>
-    <p>I2C is a <b>synchronous</b> protocol. It uses a dedicated <b>Clock (SCL)</b> wire to synchronize data sampling on the <b>Data (SDA)</b> wire. This allows for reliable communication without the baud-rate sensitivity of UART.</p>
+    <p>I2C is a <b>synchronous</b> protocol. It uses a dedicated <b>Clock (SCL)</b> wire to synchronize data sampling on the <b>Data (SDA)</b> wire. This allows for reliable communication without baud-rate sensitivity.</p>
 
     <div class="analysis-grid">
         <div class="card strength">
             <h4>✅ Strengths</h4>
             <ul>
-                <li><b>Multi-Device:</b> Connect up to 127 devices on the same 2 wires.</li>
-                <li><b>Hardware ACK:</b> Built-in confirmation that a device received the data.</li>
+                <li><b>Multi-Device:</b> Connect up to 127 devices on 2 wires.</li>
+                <li><b>Hardware ACK:</b> Built-in confirmation of data receipt.</li>
                 <li><b>Simplicity:</b> No complex baud-rate syncing required.</li>
             </ul>
         </div>
         <div class="card weakness">
             <h4>⚠️ Weaknesses</h4>
             <ul>
-                <li><b>Half-Duplex:</b> Devices cannot send and receive at the same time.</li>
-                <li><b>Address Limits:</b> Some sensors share hardcoded addresses, causing conflicts.</li>
-                <li><b>Capacitance:</b> Speed drops as more devices/wires are added to the bus.</li>
+                <li><b>Half-Duplex:</b> Cannot send and receive simultaneously.</li>
+                <li><b>Address Limits:</b> Some sensors share hardcoded addresses.</li>
+                <li><b>Capacitance:</b> Speed drops as more devices are added.</li>
             </ul>
         </div>
     </div>
 
     <h2 id="sequence">📦 The I2C Packet Sequence</h2>
-    <p>Communication is always initiated by the Master (ESP32) through a specific bit-handshake:</p>
+    <p>Communication is always initiated by the Master (ESP32) through a bit-handshake:</p>
     
     <div class="bit-sequence">
         <div class="bit-box bit-start">START</div>
@@ -238,11 +243,11 @@
     </div>
 
     <h2 id="experimental">🧪 Experimental Design: Pull-ups & Scanning</h2>
-    <p>I2C lines are "Open-Drain," meaning they cannot pull the signal HIGH on their own. Our experiment focuses on bus stability:</p>
+    <p>I2C lines are "Open-Drain" and cannot pull signals HIGH independently:</p>
     <ol>
-        <li><b>Pull-up Resistors:</b> We use 4.7kΩ resistors to ensure signals return to 3.3V correctly.</li>
-        <li><b>Bus Scanning:</b> The robot runs a startup scan to detect the Hex IDs (e.g., <code>0x68</code> for IMU). If a sensor is missing, the AI enters a failsafe state.</li>
-        <li><b>Clock Stretching:</b> Configured to allow slower sensors (like the Nano nodes) to pause the Master if they need processing time.</li>
+        <li><b>Pull-up Resistors:</b> We use 4.7kΩ resistors to return signals to 3.3V.</li>
+        <li><b>Bus Scanning:</b> Startup scan detects Hex IDs (e.g., 0x68); missing sensors trigger failsafes.</li>
+        <li><b>Clock Stretching:</b> Allows slower nodes (like Arduino Nanos) to pause the Master for processing.</li>
     </ol>
 
     <h2 id="code">💻 Source Code Preview</h2>
