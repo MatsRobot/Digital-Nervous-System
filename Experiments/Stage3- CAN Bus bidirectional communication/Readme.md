@@ -1,69 +1,65 @@
 # 🧪 Experimental Lab: Digital Nervous System
 
-## Stage3- CAN Bus bidirectional communication
+## Stage 3: Bidirectional CAN-Bus Network
 
 <p align="left">
   <a href="../">
     <img src="https://img.shields.io/badge/←_Back_to_Main-24292e?style=for-the-badge&logo=github&logoColor=white" />
   </a>
-  <a href="#setup-guide">
-    <img src="https://img.shields.io/badge/Setup_Guide-0366d6?style=for-the-badge&logo=blueprint&logoColor=white" />
-  </a>
-  <a href="#workflow">
-    <img src="https://img.shields.io/badge/Workflow-238636?style=for-the-badge&logo=visual-studio-code&logoColor=white" />
+  <a href="#python-setup">
+    <img src="https://img.shields.io/badge/Python_Venv_Setup-3776AB?style=for-the-badge&logo=python&logoColor=white" />
   </a>
 </p>
 
-This directory serves as the **Living Lab** for the MatsRobot project. It documents the step-by-step evolution of the communication backbone, from basic heartbeats to complex multi-node CAN configurations.
+This stage implements the **Network Layer**. The ESP32-S3 is no longer an isolated device; it is now a broadcasting node on a 500kbps CAN-Bus network.
 
 ---
 
-## 📅 Experimental Roadmap & Status
-Each stage builds upon the last. Use these folders to find specific circuit diagrams, firmware, and test results.
-
-| Stage | Focus | Status | Hardware Reference |
-| :--- | :--- | :--- | :--- |
-| **[Stage 1](./Stage1-Initial-Setup)** | Blink Test & Basic GPIO | ✅ Verified | ESP32 / Arduino Nano |
-| **[Stage 2](./Stage2-Sensor-working-on-I2C-bus)** | I2C Sensor Integration | ✅ Verified | MPU6050 / BME280 |
-| **[Stage 3](./Stage3-CAN-Bus-bidirectional-communication)** | Bidirectional CAN-Bus | ✅ Verified | MCP2515 Transceivers |
-| **[Stage 4](./Stage4-Adding-Practical-Nodes-to-CAN-Bus)** | Practical Node Deployment | 🛠️ In Progress | Custom Actuator Nodes |
+## 🎯 Objectives
+1.  **Bit-Packing:** Convert 16-bit sensor data into 8-bit CAN frame segments.
+2.  **TWAI Integration:** Utilize the ESP32-S3 hardware CAN controller.
+3.  **Cross-Platform Telemetry:** Monitor physical distance values on a laptop via Python.
 
 ---
 
-## 🛠️ Setup & Strategy
-<a name="setup-guide"></a>
+## 💻 Python Monitor Setup (PC Side)
+<a name="python-setup"></a>
 
-To maintain a "simple and effective" repository, we keep each stage autonomous. Each folder contains only the essential files required to reproduce the experiment:
-* **`circuit-diagrams/`**: Visual wiring guides (PNG/PDF).
-* **`src/main.cpp`**: The specific firmware logic for that stage.
-* **`platformio.ini`**: Environment configurations and library dependencies.
-* **`main.py`**: Laptop-side scripts for bus monitoring or data logging.
+Follow these exact steps to initialize the monitoring environment on your laptop:
+
+1.  **Prepare Workspace:** Place `main.py` in your local folder.
+2.  **Open Terminal:** In VS Code, go to `View > Terminal`.
+3.  **Create Virtual Environment:**
+    ```bash
+    python -m venv .venv
+    ```
+4.  **Activate Environment:**
+    ```bash
+    .venv\Scripts\activate
+    ```
+    *Note: Ensure `(.venv)` appears in green in your terminal prompt.*
+5.  **Install Requirements:**
+    ```bash
+    pip install python-can pyserial
+    ```
+6.  **Update Pip (Optional):**
+    ```bash
+    python -m pip install --upgrade pip
+    ```
+7.  **Run the Monitor:**
+    ```bash
+    python main.py
+    ```
 
 ---
 
-## 💻 Developer Workflow
-<a name="workflow"></a>
+## 🔌 Hardware Wiring (CAN)
+* **CAN Transceiver:** SN65HVD230 (connected to 3.3V).
+* **CTX (Transmit):** GPIO 17.
+* **CRX (Receive):** GPIO 18.
+* **Termination:** Ensure a 120Ω resistor is present between CAN-H and CAN-L to prevent signal reflection.
 
-### 🔌 Firmware (VS Code + PlatformIO)
-When adding or testing a node, use the PlatformIO Core CLI or the VS Code interface:
+---
 
-1.  **Initialize/Build:** `pio run`
-2.  **Upload to Hardware:** `pio run --target upload`
-3.  **Live Debugging:** `pio device monitor`
 
-> [!TIP]
-> **Port Conflicts:** Ensure the Serial Monitor is closed before attempting a new upload, especially when working with high-speed CAN data.
-
-### 🐍 Python Host Setup (Laptop)
-To interact with the nodes from your computer, use a **Virtual Environment** to manage dependencies like `python-can` or `pyserial`.
-
-```bash
-# 1. Create and Activate Environment
-python -m venv venv
-source venv/bin/activate  # Windows: .\venv\Scripts\activate
-
-# 2. Install Stage-Specific Requirements
-pip install python-can pyserial
-
-# 3. Run the Experiment Script
-python main.py
+<small>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</small>
