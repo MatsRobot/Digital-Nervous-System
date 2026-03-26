@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://matsrobot.github.io/Favicon-192.png" sizes="192x192">
     
-    <title>Experimental Lab | MatsRobot Knowledge Base</title>
-    <meta name="description" content="Living Lab documentation for the MatsRobot project, tracking the evolution of robotic communication backbones.">
+    <title>Robotics Communications | MatsRobot Knowledge Base</title>
+    <meta name="description" content="A technical guide to UART, I2C, SPI, and CAN Bus protocols used in modular robotics and N100-based systems.">
     
     <style>
         :root {
@@ -68,6 +68,41 @@
 
         .hero-text { flex: 3; }
 
+        .image-sidebar { 
+            flex: 2; 
+            border: 1px solid var(--gh-border);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .image-sidebar img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        /* Animation Container */
+        .animation-container { 
+            border: 1px solid var(--gh-border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin: 2rem 0;
+        }
+
+        .animation-container svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            max-height: 300px;
+        }
+
         h1 { font-size: 1.8rem; margin-top: 0; }
         h2 { color: var(--gh-blue); border-bottom: 1px solid var(--gh-border); padding-bottom: 0.3em; margin-top: 2rem; }
         
@@ -79,7 +114,27 @@
             border-radius: 4px;
         }
 
-        /* GitHub Button Style */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 1rem;
+        }
+
+        .topic-card {
+            border: 1px solid var(--gh-border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            background: var(--gh-bg-gray);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topic-card:hover { transform: translateY(-3px); border-color: var(--gh-blue); }
+
+        .topic-card h3 { margin-top: 0; font-size: 1.2rem; }
+
         .btn-github { 
             background-color: var(--gh-green); 
             color: white !important; 
@@ -91,43 +146,18 @@
             gap: 10px; 
             font-weight: 600;
         }
-        .btn-github:hover { background-color: var(--gh-green-hover); }
 
-        /* Roadmap Table */
-        .roadmap-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-        }
-
-        .roadmap-table th, .roadmap-table td {
-            text-align: left;
-            padding: 12px;
+        .btn-outline {
             border: 1px solid var(--gh-border);
-        }
-
-        .roadmap-table th { background: var(--gh-bg-gray); }
-
-        /* Code and Terminal Blocks */
-        code {
-            background-color: rgba(27,31,35,0.05);
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, monospace;
-            font-size: 85%;
-        }
-
-        .terminal-block {
-            background-color: var(--gh-bg-gray);
-            padding: 1rem;
+            background: #fff;
+            color: var(--gh-blue) !important;
+            padding: 6px 14px;
             border-radius: 6px;
-            border: 1px solid var(--gh-border);
-            overflow-x: auto;
-            margin: 1rem 0;
+            font-size: 0.85rem;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: auto;
         }
-
-        .status-verified { color: var(--gh-green); font-weight: bold; }
-        .status-progress { color: #9a6700; font-weight: bold; }
 
         footer { 
             margin-top: 4rem; 
@@ -141,104 +171,168 @@
         @media (max-width: 768px) { 
             .hero-section { flex-direction: column; } 
             body { padding: 1rem; }
+            h1 { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
     <nav class="sub-nav">
-        <a href="../" class="nav-back">← Back to Main</a>
-        <a href="#roadmap">📅 Roadmap</a>
-        <a href="#setup">🛠️ Setup</a>
-        <a href="#workflow">💻 Workflow</a>
+        <a href="https://matsrobot.github.io/" class="nav-back">← Hub</a>
+        <a href="#uart">📟 UART</a>
+        <a href="#i2c">🖇️ I2C</a>
+        <a href="#spi">⚡ SPI</a>
+        <a href="#can">🕸️ CAN Bus</a>
+        <a href="#experiments">🧪 Experiments</a>
     </nav>
 
     <div class="hero-section">
         <div class="hero-text">
-            <h1>🧪 Experimental Lab: Digital Nervous System</h1>
-            <p>This directory serves as the <b>Living Lab</b> for the MatsRobot project. It documents the step-by-step evolution of the communication backbone, from basic heartbeats to complex multi-node CAN configurations.</p>
+            <h1>🤖 Robotics Communications: The Digital Nervous System</h1>
+            <p>Modern robotics requires a multi-layered communication strategy. This documentation covers the protocols used to bridge high-level <b>N100 computer-vision</b> logic with low-level <b>ESP32 and Pico</b> motor control.</p>
             
             <div class="note">
-                <strong>Strategy:</strong> We maintain a modular environment where each stage is autonomous, reproducible, and documented with its own firmware and circuit logic.
+                <strong>The Mission:</strong> To create a robust, noise-resistant network that allows modular "nodes" like robot arms and eyes to function as a single unit.
             </div>
 
+            <a href="https://github.com/MatsRobot/Digital-Nervous-System" class="btn-github">
+                <span>View Repository on GitHub</span>
+            </a>
+        </div>
+
+        <div class="image-sidebar">
+            <img src="https://github.com/user-attachments/assets/16fdaa31-6648-426e-9237-6d00fc5ef95e" alt="Digital Nervous System Map">
+            <p><small>Communication Topology Map</small></p>
+        </div>
+    </div>
+
+    <div class="animation-container">
+        <svg viewBox="0 0 200 155" xmlns="http://www.w3.org/2000/svg">
+            <style>
+                .node { fill: #fff; stroke: #24292e; stroke-width: 2; }
+                .brain-node { fill: #0366d6; stroke: #0366d6; }
+                .line { stroke: #eaecef; stroke-width: 2; fill: none; }
+                
+                .pulse-out { 
+                    stroke: #2ea44f; 
+                    stroke-width: 3; 
+                    stroke-dasharray: 4, 12; 
+                    animation: flowOut 2s linear infinite; 
+                }
+                
+                .pulse-in { 
+                    stroke: #0366d6; 
+                    stroke-width: 3; 
+                    stroke-dasharray: 4, 12; 
+                    animation: flowIn 2s linear infinite; 
+                }
+                
+                @keyframes flowOut { to { stroke-dashoffset: -16; } }
+                @keyframes flowIn { to { stroke-dashoffset: 16; } }
+                
+                .label { font-family: -apple-system, sans-serif; font-size: 7px; font-weight: 600; fill: #24292e; }
+                .sub-label { font-size: 5px; fill: #6a737d; }
+            </style>
+            
+            <path class="line" d="M100 35 L40 100" />
+            <path class="line" d="M100 35 L100 115" />
+            <path class="line" d="M100 35 L160 100" />
+            
+            <path class="pulse-out" d="M100 35 L40 100" />
+            <path class="pulse-out" d="M100 35 L100 115" />
+            <path class="pulse-out" d="M100 35 L160 100" />
+
+            <path class="pulse-in" d="M100 35 L40 100" />
+            <path class="pulse-in" d="M100 35 L100 115" />
+            <path class="pulse-in" d="M100 35 L160 100" />
+
+            <circle class="node brain-node" cx="100" cy="35" r="10" />
+            <circle class="node" cx="40" cy="100" r="7" />
+            <circle class="node" cx="100" cy="115" r="7" />
+            <circle class="node" cx="160" cy="100" r="7" />
+            
+            <text x="100" y="20" class="label" text-anchor="middle">N100 BRAIN</text>
+            
+            <text x="40" y="115" class="label" text-anchor="middle">BASE UNIT</text>
+            <text x="40" y="122" class="sub-label" text-anchor="middle">ESP32 (UART)</text>
+            
+            <text x="100" y="130" class="label" text-anchor="middle">ARMS</text>
+            <text x="100" y="137" class="sub-label" text-anchor="middle">NANO (CAN)</text>
+            
+            <text x="160" y="115" class="label" text-anchor="middle">VISION UNIT</text>
+            <text x="160" y="122" class="sub-label" text-anchor="middle">PICO (SPI)</text>
+        </svg>
+        <p style="margin-top: 0;"><small>Full-Duplex Nervous System Synchronization</small></p>
+    </div>
+
+    <h2>Protocol Architectures</h2>
+
+    <div class="topic-grid">
+        
+        <div class="topic-card" id="uart">
+            <h3>📟 UART</h3>
+            <p><b>Master Interconnect:</b> The high-level bridge between the N100 Brain and the ESP32 Main Controller for telemetry and instructions.</p>
             <div style="margin-top: 15px;">
-                <a class="btn-github" href="https://github.com/MatsRobot/Digital-Nervous-System">View GitHub Repository</a>
+                <a href="UART/" class="btn-outline">Circuit & Code →</a>
+            </div>
+        </div>
+
+        <div class="topic-card" id="i2c">
+            <h3>🖇️ I2C</h3>
+            <p><b>Sensor Network:</b> Low-speed, two-wire communication for Gyroscopes (IMU), OLEDs, and compasses on the ESP32-S3.</p>
+            <div style="margin-top: 15px;">
+                <a href="I2C/" class="btn-outline">Sensor Logic →</a>
+            </div>
+        </div>
+        
+        <div class="topic-card" id="spi">
+            <h3>⚡ SPI</h3>
+            <p><b>High-Speed Data:</b> Managing fast-refresh LCDs and SD card storage on Raspberry Pi Pico for image processing pre-buffer.</p>
+            <div style="margin-top: 15px;">
+                <a href="SPI/" class="btn-outline">High-Speed Setup →</a>
+            </div>
+        </div>
+
+        <div class="topic-card" id="can">
+            <h3>🕸️ CAN Bus</h3>
+            <p><b>Industrial Backbone:</b> Daisy-chaining modular robot arms and eyes across long distances with high noise immunity.</p>
+            <div style="margin-top: 15px;">
+                <a href="CAN-Bus/" class="btn-outline">Node Architecture →</a>
+            </div>
+        </div>
+
+        <div class="topic-card" id="lab-link">
+            <h3>🧪 Experiments</h3>
+            <p><b>Living Lab:</b> Real-world staging of the digital nervous system, tracking progress from initial heartbeat to full CAN Bus deployment.</p>
+            <div style="margin-top: 15px;">
+                <a href="Experiments/" class="btn-outline">High-Speed Setup →</a>
             </div>
         </div>
     </div>
 
-    <h2 id="roadmap">📅 Experimental Roadmap & Status</h2>
-    <p>Each stage builds upon the last. Use these links to find specific circuit diagrams, firmware, and test results.</p>
-    
-    <table class="roadmap-table">
-        <thead>
-            <tr>
-                <th>Stage</th>
-                <th>Focus</th>
-                <th>Status</th>
-                <th>Hardware Reference</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><a href="./Stage1-%20Initial%20Setup%20(Blink%20Test)/index.html">Stage 1</a></td>
-                <td>Blink Test & Basic GPIO</td>
-                <td class="status-verified">✅ Verified</td>
-                <td>ESP32 / Arduino Nano</td>
-            </tr>
-            <tr>
-                <td><a href="./Stage2-%20Sensor%20working%20on%20I2C%20bus">Stage 2</a></td>
-                <td>I2C Sensor Integration</td>
-                <td class="status-verified">✅ Verified</td>
-                <td>MPU6050 / BME280</td>
-            </tr>
-            <tr>
-                <td><a href="./Stage3-%20CAN%20Bus%20bidirectional%20communication">Stage 3</a></td>
-                <td>Bidirectional CAN-Bus</td>
-                <td class="status-verified">✅ Verified</td>
-                <td>MCP2515 Transceivers</td>
-            </tr>
-            <tr>
-                <td><a href="./Stage4-%20Adding%20Practical%20Nodes%20to%20CAN%20Bus">Stage 4</a></td>
-                <td>Practical Node Deployment</td>
-                <td class="status-progress">🛠️ In Progress</td>
-                <td>Custom Actuator Nodes</td>
-            </tr>
-        </tbody>
-    </table>
+    <h2 id="experiments">Experimental Implementation</h2>
+    <p>The <b>Experimental Lab</b> is where theory meets hardware. Each stage of the nervous system is validated through isolated test environments to ensure stability before full system integration.</p>
 
-    <h2 id="setup">🛠️ Setup & Strategy</h2>
-    <p>To maintain a "simple and effective" repository, each stage is kept autonomous. Each folder contains only the essential files required to reproduce the experiment:</p>
+    <div class="note">
+        <strong>Hardware & Software Strategy:</strong> All experiments utilize the ESP32-S3 (N16P8) and follow a modular validation process—starting with simple GPIO "heartbeats" and scaling to multi-node differential signaling.
+    </div>
+
     <ul>
-        <li><strong><code>circuit-diagrams/</code>:</strong> Visual wiring guides (PNG/PDF).</li>
-        <li><strong><code>src/main.cpp</code>:</strong> The specific firmware logic for that stage.</li>
-        <li><strong><code>platformio.ini</code>:</strong> Environment configurations and library dependencies.</li>
-        <li><strong><code>main.py</code>:</strong> Laptop-side scripts for bus monitoring or data logging.</li>
+        <li><strong>Full System Diagrams:</strong> Detailed schematics showing the interplay between the N100 orchestration layer and MCU endpoints.</li>
+        <li><strong>Stage-Based Validation:</strong> Step-by-step firmware deployments focusing on specific protocol reliability (UART, I2C, CAN).</li>
+        <li><strong>Silicon Life Tests:</strong> Proving fundamental hardware execution before introducing bus noise or peripherals.</li>
     </ul>
 
-    <h2 id="workflow">💻 Developer Workflow</h2>
-    <h3>🔌 Firmware (VS Code + PlatformIO)</h3>
-    <p>When testing a node, use the PlatformIO interface or terminal:</p>
-    <div class="terminal-block">
-        <code>1. Initialize/Build: <b>pio run</b></code><br>
-        <code>2. Upload: <b>pio run --target upload</b></code><br>
-        <code>3. Live Debugging: <b>pio device monitor</b></code>
-    </div>
-
-    <h3>🐍 Python Host Setup (Laptop)</h3>
-    <p>To interact with nodes, use a <b>Virtual Environment</b> to manage dependencies:</p>
-    <div class="terminal-block">
-        <code># Create and Activate Environment</code><br>
-        <code>python -m venv venv</code><br>
-        <code>source venv/bin/activate</code><br><br>
-        <code># Install Requirements and Run</code><br>
-        <code>pip install python-can pyserial</code><br>
-        <code>python main.py</code>
-    </div>
+    <h2>Hardware Ecosystem</h2>
+    <ul>
+        <li><strong>N100 Desktop:</strong> Orchestrates high-level AI and sends hex-commands via UART.</li>
+        <li><strong>ESP32-S3/C3:</strong> Handles Bluetooth commands and bridges Vision/BT data.</li>
+        <li><strong>Arduino Nano/Pico:</strong> Specialized nodes for CAN Bus endpoints in limbs and sensors.</li>
+        <li><strong>Signal Integrity:</strong> Utilization of level-shifting (3.3V to 5V) and differential signaling (CAN) for stability.</li>
+    </ul>
 
     <footer>
-        <p>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</p>
+        <p>© 2026 MatsRobot | Robotics Communications Knowledge Base</p>
     </footer>
 
 </body>
