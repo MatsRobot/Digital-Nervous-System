@@ -19,6 +19,9 @@
 
 This directory serves as the isolated initial validation phase for the MatsRobot complex multi-node architecture. It is designed to prove fundamental operation before introducing any sensors or communication protocols.
 
+
+![CAN_Bus_ESP32_S3_bb](https://github.com/user-attachments/assets/9205949a-134e-4454-83ec-c06101fcd827)
+
 ---
 
 ## 🎯 Stage 1 Objective: Proving Silicon Life
@@ -58,6 +61,9 @@ To maintain a "simple and effective" repository, we keep each stage autonomous. 
 
 ---
 
+<img width="896" height="1195" alt="download" src="https://github.com/user-attachments/assets/1a9be11d-4cd1-49cf-bb30-ad60e00c1ba9" />
+
+---
 ## 💻 Developer Workflow
 <a name="workflow"></a>
 
