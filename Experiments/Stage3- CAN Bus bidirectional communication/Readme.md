@@ -53,7 +53,7 @@ Follow these exact steps to initialize the monitoring environment on your laptop
     python main.py
     ```
 
-<img width="896" height="1195" alt="download" src="https://github.com/user-attachments/assets/1a9be11d-4cd1-49cf-bb30-ad60e00c1ba9" />
+<img width="896" height="1195" alt="Experimental Setup" src="https://github.com/user-attachments/assets/7b35c90a-d832-4047-ac21-dc6f341bbadf" />
 
 ---
 
