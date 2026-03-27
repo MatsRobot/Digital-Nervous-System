@@ -57,6 +57,28 @@ Follow these exact steps to initialize the monitoring environment on your laptop
 
 ---
 
+## ⚡ Direct Execution via PowerShell
+If you already have Python installed on your desktop, you can run the monitor directly through Windows PowerShell. This is beneficial for users who want a "plug-and-play" experience without managing virtual environment states.
+
+### 1. Open PowerShell in the Project Folder
+Navigate to your project folder in File Explorer. **Shift + Right-Click** in any empty space and select **"Open PowerShell window here"** or **"Open in Terminal."**
+
+### 2. Global Library Installation (One-Time)
+Since you are bypassing the virtual environment, you need the libraries installed directly on your Windows system. Run these commands once:
+
+* **Install CAN library:** `pip install python-can` 
+    *(If pip is not recognized, try: `python -m pip install python-can`)*
+* **Install Serial library:** `pip install pyserial` 
+    *(If pip is not recognized, try: `python -m pip install pyserial`)*
+
+### 3. Launch the Monitor
+Type the following command and press **Enter**:
+```powershell
+python main.py
+```
+
+---
+
 ## 🔌 Hardware Wiring (CAN)
 * **CAN Transceiver:** SN65HVD230 (connected to 3.3V).
 * **CTX (Transmit):** GPIO 17.
