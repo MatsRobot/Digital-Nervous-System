@@ -22,6 +22,20 @@ This stage implements a **Heterogeneous Network Layer**. The system has evolved 
 
 ---
 
+![CAN_Bus_Nano_Display_bb](https://github.com/user-attachments/assets/625fba50-5650-477d-a219-07305f061c11)
+
+---
+
+## 📂 File Architecture & Node Roles
+
+| File | Platform | Role |
+| :--- | :--- | :--- |
+| **`main.py`** | Laptop (PC) | **The N100 Brain:** Creates the central dashboard to communicate with all sensors and coordinate network traffic. |
+| **`main.cpp` (Nano)** | Arduino Nano | **Ultrasound Node:** Manages the MaxSonar LV-EZ1 sensor and the LCD2004 status display. |
+| **`main.cpp` (ESP32)** | ESP32-S3 | **ToF Node:** Running the baseline code from Stage 2 to manage the VL53L0X sensor and OLED. |
+
+---
+
 ## 🧠 1. Network Data Map
 This table defines the traffic priority and data structure across the CAN-High and CAN-Low lines.
 
@@ -60,6 +74,10 @@ To resolve initial communication "hit and miss" issues, the following technical 
 
 ---
 
+![Network_Laptop_Nano_ESP32S3](https://github.com/user-attachments/assets/c852ec64-d433-427d-8404-984e2b9cd33c)
+
+---
+
 ## 💻 4. Final Python Dashboard Baseline
 The laptop acts as the network coordinator using a USB-to-CAN adapter.
 
@@ -68,9 +86,22 @@ The laptop acts as the network coordinator using a USB-to-CAN adapter.
 * **Bitrate:** 500,000 (500kbps).
 * **Cycle Time:** 100ms (10Hz) transmission for motor and LCD commands.
 
+---
+
 ### **Execution**
+
+#### **Option A: Virtual Environment (Recommended)**
 1.  **Activate Environment:** `.venv\Scripts\activate`
 2.  **Run Monitor:** `python main.py`
 
+#### **Option B: Direct PowerShell Execution**
+If libraries (`python-can`, `pyserial`) are installed globally, you can run the monitor directly from any PowerShell terminal:
+1.  **Open PowerShell** in the project directory.
+2.  **Run Monitor:**
+    ```powershell
+    python main.py
+    ```
+
 ---
-<small>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</small>
+
+<small>© 2026 MatsRobot | Licensed under the [MIT License](https://github.com/MatsRobot/matsrobot.github.io/blob/main/LICENSE)</small>
