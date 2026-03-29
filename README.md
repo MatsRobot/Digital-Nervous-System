@@ -19,6 +19,7 @@
 **Robotics Communications** documents the protocols used to synchronize high-level intelligence with low-level hardware.
 From **N100** computer-vision processing to **ESP32** motor control, this repo tracks how data flows through the machine.
 
+
 ---
 
 <table width="100%">
@@ -27,7 +28,7 @@ From **N100** computer-vision processing to **ESP32** motor control, this repo t
       <h2>🔌 The Mission: Seamless Connectivity</h2>
     </td>
     <td width="50%" align="center" valign="middle">
-      <img src="https://github.com/user-attachments/assets/16fdaa31-6648-426e-9237-6d00fc5ef95e" alt="Circuitry Visualization" width="350" style="border-radius: 8px;" />
+      <img src="https://github.com/user-attachments/assets/413bc2db-61d1-47e4-ab53-cd875a7cfaf1" alt="Circuitry Visualization" width="350" style="border-radius: 8px;" />
     </td>
   </tr>
   <tr>
