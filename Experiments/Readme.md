@@ -67,8 +67,5 @@ pip install python-can pyserial
 python main.py
 
 ```
+<small>© 2026 MatsRobot | Licensed under the [MIT License](https://github.com/MatsRobot/matsrobot.github.io/blob/main/LICENSE)</small>
 
----
-
-
-<small>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</small>
