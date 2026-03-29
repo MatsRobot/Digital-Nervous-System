@@ -58,7 +58,4 @@ Refer to the master circuit diagram for wire colors.
 > **I2C Pull-up Resistors:** Most VL53L0X and OLED modules include internal 10k pull-up resistors. If you experience "OLED fail" or "TIMEOUT" messages, check that your 3.3V power rail is stable.
 
 
----
-
-
-<small>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</small>
+---<small>© 2026 MatsRobot | Licensed under the [MIT License](https://github.com/MatsRobot/matsrobot.github.io/blob/main/LICENSE)</small>
