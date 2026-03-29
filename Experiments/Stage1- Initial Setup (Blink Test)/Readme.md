@@ -75,6 +75,5 @@ To maintain a "simple and effective" repository, we keep each stage autonomous. 
 **Observe:** If the S3 is functional, the LED attached to GPIO 13 will begin to blink at a 2.5Hz frequency (200ms ON, 200ms OFF). If it does not, all subsequent complex stages cannot be attempted.
 
 ---
+<small>© 2026 MatsRobot | Licensed under the [MIT License](https://github.com/MatsRobot/matsrobot.github.io/blob/main/LICENSE)</small>
 
-
-<small>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</small>
