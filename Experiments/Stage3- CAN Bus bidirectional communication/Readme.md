@@ -15,6 +15,9 @@ This stage implements the **Network Layer**. The ESP32-S3 is no longer an isolat
 
 ![CAN_Bus_ESP32_S3_bb](https://github.com/user-attachments/assets/9205949a-134e-4454-83ec-c06101fcd827)
 
+![CAN_Bus_Nano_Display_bb](https://github.com/user-attachments/assets/d9535a4a-a23d-45f4-83dc-0a39f1a110c3)
+
+
 ---
 
 ## 🎯 Objectives
@@ -52,7 +55,8 @@ Follow these exact steps to initialize the monitoring environment on your laptop
     ```bash
     python main.py
     ```
-<img width="896" height="1195" alt="Experimental Setup" src="https://github.com/user-attachments/assets/e2f3b14d-9218-4969-9579-33888563f01d" />
+
+![Network_Laptop_Nano_ESP32S3](https://github.com/user-attachments/assets/10eb33ff-98f0-4b01-a8be-1ca65095e1d3)
 
 ---
 
