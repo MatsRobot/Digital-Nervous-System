@@ -85,4 +85,5 @@ python main.py
 * **Termination:** Ensure a 120Ω resistor is present between CAN-H and CAN-L to prevent signal reflection.
 
 ---
-<small>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</small>
+<small>© 2026 MatsRobot | Licensed under the [MIT License](https://github.com/MatsRobot/matsrobot.github.io/blob/main/LICENSE)</small>
+
