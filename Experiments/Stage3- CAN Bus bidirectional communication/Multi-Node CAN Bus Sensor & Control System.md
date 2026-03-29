@@ -2,8 +2,6 @@
 
 This project demonstrates a real-time, distributed control network using the **CAN (Controller Area Network)** protocol. It features a central Python-based dashboard ("The Brain") and two specialized hardware nodes (ESP32-S3 and Arduino Nano) that communicate to share sensor data and receive remote commands.
 
-
-
 ---
 
 ## 🛰️ System Architecture
@@ -68,3 +66,6 @@ All nodes use `millis()` or specific timeouts rather than `delay()`. This ensure
 1.  Connect the CAN High (H) and CAN Low (L) lines across all nodes.
 2.  Install **120Ω termination resistors** at the two physical ends of the bus.
 3.  Ensure all devices share a common Ground (GND).
+  
+---
+<small>© 2026 MatsRobot | Experimental Logs for the Digital Nervous System Project</small>
