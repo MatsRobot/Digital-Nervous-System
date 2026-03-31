@@ -1,12 +1,12 @@
-import can
-import time
-import threading
-import tkinter as tk
-from tkinter import ttk
+import can                  # Library to talk to the CAN-Bus hardware
+import time                 # Library for handling delays and timing
+import threading            # Allows us to run the CAN communication in the background
+import tkinter as tk        # The standard Python library for creating Windows/GUIs
+from tkinter import ttk     # "Themed" widgets for a more modern look
 
 # --- CONFIGURATION ---
-CHANNEL = 'COM11'  # Ensure this matches your slcan hardware port
-BITRATE = 500000
+CHANNEL = 'COM11'           # The USB port where your CAN adapter is plugged in
+BITRATE = 500000            # Speed of the CAN network (500kbps)
 
 class CanDashboard:
     def __init__(self, root):
@@ -14,56 +14,46 @@ class CanDashboard:
         self.root.title("CAN Multi-Node System Control")
         self.root.geometry("400x700")
         
-        # --- Variables ---
-        # ESP32 Node (0x123)
-        self.esp_dist = tk.StringVar(value="--- mm")
-        self.esp_heartbeat = tk.StringVar(value="0")
-        
-        # Nano Node (0x111)
-        self.nano_dist = tk.StringVar(value="--- cm")
-        
-        # System State
-        self.last_status = tk.StringVar(value="Disconnected")
+        # --- Variables (Hold the data shown on screen) ---
+        self.esp_dist = tk.StringVar(value="--- mm")        # Storage for distance text
+        self.esp_heartbeat = tk.StringVar(value="0")       # Storage for heartbeat number
+        self.nano_dist = tk.StringVar(value="--- cm")       # Storage for 2nd node data
+        self.last_status = tk.StringVar(value="Disconnected") 
         self.port_status = tk.StringVar(value=f"Target: {CHANNEL}")
+        
+        # Convert "Stop" to ASCII numbers for the CAN message
         self.pending_cmd_bytes = list("Stop".encode('ascii')) 
-        self.bus = None 
+        self.bus = None     # This will hold the CAN connection
         
-        self.setup_ui()
+        self.setup_ui()     # Build the buttons and labels
         
-        # Start background thread for CAN communication
+        # Start a "Worker" thread so the GUI doesn't freeze while waiting for data
         self.running = True
         self.can_thread = threading.Thread(target=self.can_worker, daemon=True)
         self.can_thread.start()
 
     def setup_ui(self):
-        # 1. Connection Status
+        """Creates all the buttons and labels you see on the screen"""
+        # Section 1: Network Status
         status_frame = ttk.LabelFrame(self.root, text=" Network Status ")
         status_frame.pack(pady=10, padx=10, fill="x")
-        ttk.Label(status_frame, textvariable=self.port_status, font=('Arial', 9, 'bold')).pack()
+        ttk.Label(status_frame, textvariable=self.port_status).pack()
         self.status_label = ttk.Label(status_frame, textvariable=self.last_status, foreground="red")
         self.status_label.pack()
 
-        # 2. ESP32 Node Display (ID 0x123)
+        # Section 2: ESP32 Data (Displays IR and Heartbeat)
         esp_frame = ttk.LabelFrame(self.root, text=" ESP32 Node (0x123) ")
         esp_frame.pack(pady=10, padx=10, fill="x")
-        ttk.Label(esp_frame, text="VL53L0X Sensor:", font=('Arial', 9)).pack()
         ttk.Label(esp_frame, textvariable=self.esp_dist, font=('Arial', 25, 'bold'), foreground="blue").pack()
-        ttk.Label(esp_frame, textvariable=self.esp_heartbeat, font=('Arial', 9)).pack()
+        ttk.Label(esp_frame, textvariable=self.esp_heartbeat).pack()
 
-        # 3. Nano Node Display (ID 0x111)
-        nano_frame = ttk.LabelFrame(self.root, text=" Nano Node (0x111) ")
-        nano_frame.pack(pady=10, padx=10, fill="x")
-        ttk.Label(nano_frame, text="MaxSonar Sensor:", font=('Arial', 9)).pack()
-        ttk.Label(nano_frame, textvariable=self.nano_dist, font=('Arial', 25, 'bold'), foreground="purple").pack()
-
-        # 4. Robot Control Pad (TX to ID 0x456)
+        # Section 4: Movement Control Pad
         btn_frame = ttk.LabelFrame(self.root, text=" Control Interface ")
         btn_frame.pack(pady=10, padx=10, fill="x")
-        
         pad_frame = ttk.Frame(btn_frame)
         pad_frame.pack(pady=5)
 
-        # Movement Buttons
+        # Button Layout: (Label, Command, Row, Column)
         btns = [
             ("FORWARD", "Forward", 0, 1),
             ("LEFT", "Left", 1, 0),
@@ -75,68 +65,20 @@ class CanDashboard:
         for text, cmd, r, c in btns:
             b = ttk.Button(pad_frame, text=text)
             b.grid(row=r, column=c, padx=3, pady=3)
-                
-            # Change 1: Set command on Press
+            # When button is PRESSED, send the command
             b.bind('<ButtonPress-1>', lambda e, x=cmd: self.set_cmd(x))
-                
-            # Change 2: ALWAYS reset to "Stop" on Release for ALL buttons
+            # When button is RELEASED, immediately send "Stop"
             b.bind('<ButtonRelease-1>', lambda e: self.set_cmd("Stop"))
-                
 
-        # 5. Remote Nano LCD Command (TX to ID 0x500)
-        # Momentary: Press sends 1 (Show), Release sends 0 (Clear)
-        trigger_btn = ttk.Button(btn_frame, text="LCD DISPLAY")
-        trigger_btn.pack(pady=15, padx=20, fill="x")
-        
-        # Action on Press: Send '1' and show "ON" status
-        trigger_btn.bind('<ButtonPress-1>', lambda e: self.send_lcd_cmd(1))
-        
-        # Action on Release: Send '0' and reset UI to "Connected"
-        trigger_btn.bind('<ButtonRelease-1>', lambda e: self.send_lcd_cmd(0))
-        
-    def send_lcd_cmd(self, state):
-            """Sends momentary 1 or 0 to Nano LCD (0x500)"""
-            if self.bus:
-                try:
-                    # Send the state (1 or 0) as a single byte
-                    msg = can.Message(
-                        arbitration_id=0x500,
-                        data=[state], 
-                        is_extended_id=False
-                    )
-                    self.bus.send(msg)
-                    
-                    # Update UI: If state is 0, we "blank" the message back to "Connected"
-                    status_text = "LCD Message ON" if state == 1 else "Connected"
-                    self.last_status.set(status_text)
-                except Exception as e:
-                    print(f"LCD Command failed: {e}")
-                
-                
     def set_cmd(self, word):
-            """Prepares motor commands. Now resets to Stop on release."""
-            self.pending_cmd_bytes = list(word.encode('ascii'))
-            if self.bus:
-                # This helps you see in the UI that the command is pulsing
-                self.last_status.set(f"Bus Active - CMD: {word}")
-            
-    def send_lcd_trigger(self):
-        """Sends a specific trigger pulse to the Nano Node"""
-        if self.bus:
-            try:
-                trigger_msg = can.Message(
-                    arbitration_id=0x500,
-                    data=[0x01, 0x41, 0x43, 0x4B], # "ACK" payload
-                    is_extended_id=False
-                )
-                self.bus.send(trigger_msg)
-                self.last_status.set("LCD Trigger Sent")
-            except Exception as e:
-                print(f"Trigger failed: {e}")
+        """Converts text like 'Forward' into raw bytes for the CAN bus"""
+        self.pending_cmd_bytes = list(word.encode('ascii'))
+        self.last_status.set(f"Bus Active - CMD: {word}")
 
     def can_worker(self):
-        """Background thread for handling all CAN traffic"""
+        """This function runs in the background. It sends and receives all data."""
         while self.running:
+            # 1. Connection Logic: Try to open the USB-CAN port
             if self.bus is None:
                 try:
                     self.bus = can.interface.Bus(interface='slcan', channel=CHANNEL, bitrate=BITRATE)
@@ -148,55 +90,45 @@ class CanDashboard:
                     continue
 
             try:
-                # 1. RECEIVE PHASE
+                # 2. RECEIVE LOOP: Check for data coming from the Robot
                 while True:
-                    msg = self.bus.recv(0.001)
-                    if msg is None: break
+                    msg = self.bus.recv(0.001) # Check for a message for 1 millisecond
+                    if msg is None: break     # If no message, move to sending phase
                     
-                    # Process ESP32 Distance (0x123)
-                    if msg.arbitration_id == 0x123:
-                        dist_mm = (msg.data[0] << 8) | msg.data[1]
-                        self.esp_dist.set(f"{dist_mm} mm")
+                    if msg.arbitration_id == 0x123: # If it's the ESP32
                         self.esp_heartbeat.set(f"ESP Seq: {msg.data[2]}")
                         
-                        # NEW: Decode IR Status Byte
+                        # DECODE IR STATUS: Check the bits in data[3]
                         ir_byte = msg.data[3]
-                        fl = "🔴" if (ir_byte & 0x01) else "⚪"
-                        fr = "🔴" if (ir_byte & 0x02) else "⚪"
-                        rl = "🔴" if (ir_byte & 0x04) else "⚪"
-                        rr = "🔴" if (ir_byte & 0x08) else "⚪"
+                        fl = "🔴" if (ir_byte & 0x01) else "⚪" # Front Left
+                        fr = "🔴" if (ir_byte & 0x02) else "⚪" # Front Right
+                        rl = "🔴" if (ir_byte & 0x04) else "⚪" # Rear Left
+                        rr = "🔴" if (ir_byte & 0x08) else "⚪" # Rear Right
                         self.last_status.set(f"IR: FL{fl} FR{fr} RL{rl} RR{rr}")
-                    
-                    # Process Nano Distance (0x111)
-                    elif msg.arbitration_id == 0x111:
-                        dist_cm = msg.data[0]
-                        self.nano_dist.set(f"{dist_cm} cm")
 
-    # 2. SEND PHASE inside the while running loop
-                    # If command is a movement, send it continuously (Heartbeat)
-                    # If command is Stop, send it a few times then stay quiet
-                    current_cmd_str = "".join(map(chr, self.pending_cmd_bytes))
-                    
-                    if current_cmd_str != "Stop":
-                        tx_msg = can.Message(arbitration_id=0x456, data=self.pending_cmd_bytes, is_extended_id=False)
+                # 3. SEND PHASE: Send the current command to the Robot
+                current_cmd_str = "".join(map(chr, self.pending_cmd_bytes))
+                
+                if current_cmd_str != "Stop":
+                    # For movement, send the command repeatedly at 10Hz
+                    tx_msg = can.Message(arbitration_id=0x456, data=self.pending_cmd_bytes)
+                    self.bus.send(tx_msg)
+                    self.already_stopped = False
+                    time.sleep(0.1) 
+                else:
+                    # For Stop, send it once then be quiet until the next button press
+                    if not hasattr(self, 'already_stopped') or not self.already_stopped:
+                        tx_msg = can.Message(arbitration_id=0x456, data=self.pending_cmd_bytes)
                         self.bus.send(tx_msg)
-                        time.sleep(0.1) # 10Hz Heartbeat for movement
-                    else:
-                        # If it's "Stop", just send once to ensure robot heard us, then wait
-                        if not hasattr(self, 'already_stopped') or not self.already_stopped:
-                            tx_msg = can.Message(arbitration_id=0x456, data=self.pending_cmd_bytes, is_extended_id=False)
-                            self.bus.send(tx_msg)
-                            self.already_stopped = True
-                        time.sleep(0.1)
-                    
-                    if current_cmd_str != "Stop":
-                        self.already_stopped = False
-            except Exception:
-                self.bus = None
-                self.last_status.set("Bus Error - Reconnecting")
+                        self.already_stopped = True
+                    time.sleep(0.1)
+
+            except Exception as e:
+                print(f"CAN Error: {e}")
+                self.bus = None # Trigger reconnection
                 time.sleep(1)
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = CanDashboard(root)
-    root.mainloop()
+    root.mainloop() # Start the window
