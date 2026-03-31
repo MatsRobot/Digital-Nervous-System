@@ -63,8 +63,7 @@ xTaskCreatePinnedToCore(TaskExecution, "Exec", 4096, NULL, 1, NULL, 1);
 
 ## 3. Non-Blocking Design
 
-By using vTaskDelay(1) instead of delay(), the processors never truly "sleep"—they yield just enough time for the background WiFi/Bluetooth stacks to stay stable while maintaining su
-b-millisecond responsiveness to incoming CAN frames.
+By using vTaskDelay(1) instead of delay(), the processors never truly "sleep"—they yield just enough time for the background WiFi/Bluetooth stacks to stay stable while maintaining sub-millisecond responsiveness to incoming CAN frames.
 
 ### 3. Launch the Monitor
 Type the following command and press **Enter**:
@@ -72,15 +71,14 @@ Type the following command and press **Enter**:
 python main.py
 ```
 
+![BaseUnit_ESP32-S3-N16R8-Ver2_bb](https://github.com/user-attachments/assets/ac244bf0-2433-49af-ad09-43d43df1d76e)
+
 ---
 
 ## 🔌 Hardware Wiring (Safety Nodes)
-IR Sensors: Connected to GPIO 1, 2, 41, and 42.
-
-Bluetooth: HC-06 module connected to GPIO 43 (RX) and 44 (TX).
-
-
-CAN Transceiver: SN65HVD230 connected to GPIO 17 (TX) and 18 (RX).
+* **IR Sensors:**  Connected to GPIO 1, 2, 41, and 42.
+* **Bluetoot:**  HC-06 module connected to GPIO 43 (RX) and 44 (TX).
+* **CAN Transceiver:**  SN65HVD230 connected to GPIO 17 (TX) and 18 (RX).
 
 ---
 <small>© 2026 MatsRobot | Licensed under the [MIT License](https://github.com/MatsRobot/matsrobot.github.io/blob/main/LICENSE)</small>
