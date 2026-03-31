@@ -1,6 +1,6 @@
 # 🧪 Experimental Lab: Digital Nervous System
 
-## Stage 3: Dual-Core SMP & Hardware Abstraction
+## Stage 3: Dual-Core Symmetric Multiprocessing (SMP) & Hardware Abstraction
 
 <p align="left">
   <a href="../">
