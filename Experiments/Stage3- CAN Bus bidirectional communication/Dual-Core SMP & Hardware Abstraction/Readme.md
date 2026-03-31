@@ -13,8 +13,6 @@
 
 This stage implements the **Asynchronous Execution Layer**. The ESP32-S3 is no longer bound by a single-loop bottleneck; it now utilizes **Symmetric Multiprocessing (SMP)** to split high-latency communication from time-critical motor safety.
 
-
-
 ---
 
 ## 🎯 Objectives
@@ -71,15 +69,25 @@ Type the following command and press **Enter**:
 python main.py
 ```
 
-![BaseUnit_ESP32-S3-N16R8-Ver2_bb](https://github.com/user-attachments/assets/ac244bf0-2433-49af-ad09-43d43df1d76e)
+
+## 🖥️ System Architecture & Environment
+
+This project operates as a distributed system across multiple hardware and software environments. Below is the breakdown of where each component resides:
+
+* **Laptop (The Brain):** Runs the `main.py` Python script. It serves as the master control dashboard, providing a GUI for manual commands and visualizing real-time telemetry received via the CAN-Bus.
+* **ESP32-S3 (The Central Controller):** Runs the `main.cpp` firmware. It is responsible for the dual-core multitasking logic, managing both the Bluetooth override and the low-level motor execution.
+* **Dependency Management:** All C++ libraries required for the ESP32-S3 (including CAN-Bus, OLED, and GFX drivers) are managed and listed in the `platformio.ini` configuration file.
 
 ---
 
+![BaseUnit_ESP32-S3-N16R8-Ver2_bb](https://github.com/user-attachments/assets/ac244bf0-2433-49af-ad09-43d43df1d76e)
+
+---
 ## 🔌 Hardware Wiring (Safety Nodes)
 * **IR Sensors:**  Connected to GPIO 1, 2, 41, and 42.
 * **Bluetoot:**  HC-06 module connected to GPIO 43 (RX) and 44 (TX).
 * **CAN Transceiver:**  SN65HVD230 connected to GPIO 17 (TX) and 18 (RX).
-
+  
 ---
 <small>© 2026 MatsRobot | Licensed under the [MIT License](https://github.com/MatsRobot/matsrobot.github.io/blob/main/LICENSE)</small>
 
