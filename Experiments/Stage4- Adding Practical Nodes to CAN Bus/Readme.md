@@ -51,7 +51,46 @@ if (canId == 0x201) {
 }
 
 ```
+# Multi-Node CAN Robotic Control System
 
+## 📌 Project Overview
+This project involved the development of a distributed robotic control system using a **Controller Area Network (CAN)**. The architecture leverages an **ESP32-S3** as the primary Base Unit (Motor Controller), an **Arduino Nano** for sonar data, and an **ESP32-C3** for environmental calculations. The system is managed by a high-speed Python Dashboard ("The Brain") with a real-time manual override via Bluetooth (HC-06).
+
+## 🛠️ Core Implementations
+
+### 1. Dual-Priority Command Logic
+To balance autonomous "Brain" control with manual "Human" safety, we implemented a strict priority hierarchy in the Base Unit firmware:
+* **Bluetooth Supremacy**: Any data received via the HC-06 module (Bluetooth) immediately triggers the `humanInControl` flag.
+* **Handover Watchdog**: The system uses a 2000ms safety timeout. If the Bluetooth source remains silent for >2 seconds, the system resets, clearing the "Human" lock and allowing the CAN-based Brain to resume control.
+* **State Reset**: Upon a timeout, the system forces an "Idle" state, clearing the OLED display and halting motors to prevent "runaway" scenarios.
+
+### 2. Bus Optimization: "Silence is Stop"
+We moved away from a continuous "flood" of data to maintain a clean, efficient bus:
+* **Event-Driven Transmission**: The Python dashboard only sends movement strings (e.g., "Forward") while a control button is actively pressed.
+* **Heartbeat Logic**: To keep the hardware watchdog satisfied, the dashboard sends a single command "pulse" every 1 second during active hold.
+* **Reduced Overhead**: By stopping all transmissions when no button is pressed, we utilize the hardware's natural timeout to stop the robot, reducing bus traffic by approximately 90% during idle periods.
+
+### 3. High-Speed Telemetry & Bitmasking
+To achieve a "real-time" feel in the dashboard, telemetry was optimized at both the hardware and software levels:
+* **Fast Hardware Updates**: The ESP32-S3 transmits telemetry frames every 25ms.
+* **Data Packing**: All four IR sensors (FL, FR, RL, RR) are packed into a single 8-bit integer using bitmasking (e.g., `irStatus |= 0x04` for Rear Left) to keep the CAN payload minimal.
+* **High-Frequency Polling**: The Python Brain uses a dedicated thread with a 1ms `bus.recv()` timeout, ensuring incoming sensor data is processed and displayed instantly.
+
+## 📊 Hardware & Network Configuration
+
+| Node | ID (Hex) | Role | Key Hardware |
+| :--- | :--- | :--- | :--- |
+| **Base Unit** | `0x123` (TX) / `0x456` (RX) | Motor & Logic Controller | ESP32-S3, SSD1306 OLED, HC-06 |
+| **Brain** | `0x456` (TX) / `0x123` (RX) | Dashboard & Autonomous Logic | Python (python-can), SLCAN Adapter |
+| **Sonar Node** | `0x111` | Distance Sensing | Arduino Nano, HC-SR04 |
+| **Calc Node** | `0x124` | Adjusted Distance/Angle | ESP32-C3 |
+
+**Network Speed:** 500 KBPS (TWAI/CAN)
+
+## ✅ Outcomes
+* **Robust Safety**: Integrated local IR "Hard Stops" in the motor driver logic work independently of the CAN bus to prevent collisions even during signal loss.
+* **Dynamic Handover**: Seamlessly switch between Python-based navigation and manual Bluetooth remote control without rebooting.
+* **OLED Feedback**: The onboard display provides immediate diagnostic data, including current control mode (HUMAN/BRAIN) and active command status.
 
 ---
 ## ⚙️ Environment (platformio.ini)
