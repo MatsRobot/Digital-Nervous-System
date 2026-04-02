@@ -24,7 +24,7 @@ Each stage builds upon the last. Use these folders to find specific circuit diag
 | **[Stage 1](./Stage1- Initial Setup (Blink Test))** | Blink Test & Basic GPIO | ✅ Verified | ESP32 / Arduino Nano |
 | **[Stage 2](./Stage2- Sensor working on I2C bus)** | I2C Sensor Integration | ✅ Verified | MPU6050 / BME280 |
 | **[Stage 3](./Stage3- CAN Bus bidirectional communication)** | Bidirectional CAN-Bus | ✅ Verified | MCP2515 Transceivers |
-| **[Stage 4](./Stage4- Adding Practical Nodes to CAN Bus)** | Practical Node Deployment | 🛠️ In Progress | Custom Actuator Nodes |
+| **[Stage 4](./Stage4- Adding Practical Nodes to CAN Bus)** | Practical CAN Bus with 4 Nodes | ✅ Verified | PC via USB, ESP32-S3, ESP32-C3, Arduino Nano |
 
 ---
 
