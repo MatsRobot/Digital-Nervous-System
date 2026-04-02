@@ -1,4 +1,4 @@
-# 🛠️ Stage 4: Adding Practical Nodes to CAN Bus
+# 🛠️ Stage 4: Adding 4 Practical Nodes to the CAN Bus
 
 <p align="left">
   <a href="../">
@@ -13,6 +13,10 @@
 </p>
 
 **Stage 4** transitions from theoretical communication to functional robot "muscles." In this stage, we deploy multiple **Actuator Nodes** (Arduino Nano / Raspberry Pi Pico) to the bus to handle real-world physical tasks.
+
+---
+
+<img width="1361" height="768" alt="Practical Nodes to CAN Bus" src="https://github.com/user-attachments/assets/94442384-8459-434c-871d-8b73448b4709" />
 
 ---
 
@@ -34,6 +38,28 @@
 
 > [!NOTE]
 > **Termination Check:** As this stage adds physical length to the bus, ensure the 120Ω resistors remain only at the two furthest physical ends of the chain to avoid signal reflections.
+
+---
+## 🚌 Physical Network Topology: The Daisy-Chain
+
+To maintain signal integrity at **500 KBPS**, the hardware is wired in a linear "Daisy-Chain" configuration. A single twisted-pair cable (CAN High & CAN Low) runs the length of the robot, connecting each node in sequence.
+
+
+### 🛰️ Node Sequence
+The bus starts at your workstation and travels through each specialized sensor node before ending at the drive system:
+
+1.  **Node 0: The Brain (Laptop)** Connected via a **USB-to-CAN SLCAN Adapter**. This is the entry point for the Python Dashboard.
+2.  **Node 1: Sonar Node (Arduino Nano)** Uses an **MCP2515 Shield** to interface with the bus.
+3.  **Node 2: Calc Node (ESP32-C3)** Uses an **SN65HVD230 transceiver** to send adjusted Lidar data.
+4.  **Node 3: Base Unit (ESP32-S3)** The final node in the chain, managing motors and IR safety.
+
+### 🛠️ Wiring Specifications
+
+| Feature | Requirement |
+| :--- | :--- |
+| **Cable Type** | 120Ω Shielded Twisted Pair (STP) preferred. |
+| **Termination** | **120Ω Resistors** must be placed ONLY at Node 0 and Node 3. |
+| **CAN_H / CAN_L** | Ensure polarity is consistent across all four terminal blocks. |
 
 ---
 
