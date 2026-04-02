@@ -23,6 +23,10 @@ This node acts as the "eyes" of the robot. Utilizing an **Arduino Nano** and a *
 
 ---
 
+![CAN_Bus_Nano_Display](https://github.com/user-attachments/assets/468f0892-0aac-4770-b8e2-43770e14d4d1)
+
+---
+
 ## 🔌 Circuit Design & Integration
 <a name="circuit-design"></a>
 
