@@ -1,0 +1,3 @@
+This code is for the ESP32-S3 Node, which acts as the "Receiver and Actuator" for the robot. It manages motor control, reads four Infrared (IR) collision sensors, and switches between "Human" control (via Bluetooth) and "Brain" control (via the PC Dashboard over CAN-Bus).
+
+It uses FreeRTOS to run two tasks simultaneously: one for communication (TaskRadio) and one for hardware execution and display (TaskExecution).

@@ -1,0 +1,1 @@
+This is a Python script using tkinter for the GUI and python-can for communication. It acts as the "Master Node" or "Dashboard," monitoring three external hardware nodes (ESP32-S3, Arduino Nano, and ESP32-C3) and sending commands back to the S3.

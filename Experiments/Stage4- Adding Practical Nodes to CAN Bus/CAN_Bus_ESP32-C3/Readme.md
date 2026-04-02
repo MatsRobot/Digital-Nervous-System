@@ -1,0 +1,1 @@
+This code is for the ESP32-C3 Node, which acts as a Scanning LiDAR Sensor. Its primary job is to sweep a laser distance sensor back and forth using a servo motor, calculate the "adjusted" forward distance based on the current angle, and report that data back to the PC Dashboard via the CAN-Bus.
