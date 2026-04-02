@@ -59,7 +59,7 @@ if (millis() - lastCanTx >= 100) {
 }
 ```
 
-##⚙️ Environment (platformio.ini)
+## ⚙️ Environment (platformio.ini)
 ```cpp
 [env:sonar_node]
 platform = atmelavr
@@ -70,7 +70,7 @@ lib_deps =
     marcoschwartz/LiquidCrystal_I2C @ ^1.1.2
 ```
 
-##📊 Message Protocol
+## 📊 Message Protocol
 
 | ID (Hex) | Direction | Byte 0 | Byte 1 | Description |
 | :--- | :--- | :--- | :--- | :--- |
