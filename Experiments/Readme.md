@@ -52,6 +52,8 @@ When adding or testing a node, use the PlatformIO Core CLI or the VS Code interf
 > [!TIP]
 > **Port Conflicts:** Ensure the Serial Monitor is closed before attempting a new upload, especially when working with high-speed CAN data.
 
+---
+
 ### 🐍 Python Host Setup (Laptop)
 To interact with the nodes from your computer, use a **Virtual Environment** to manage dependencies like `python-can` or `pyserial`.
 
